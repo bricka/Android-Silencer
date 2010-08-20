@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, Silencer!</string>
     <string name="app_name">Silencer</string>
+<string name="toggle_silence">Toggle Silence</string>
 </resources>

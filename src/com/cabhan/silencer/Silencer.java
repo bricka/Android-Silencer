@@ -16,7 +16,6 @@ import android.widget.TextView;
 public class Silencer extends Activity
 {
 	private TextView tv;
-	private AudioManager audioManager;
 	
     /** Called when the activity is first created. */
     @Override
@@ -25,13 +24,9 @@ public class Silencer extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        tv = (TextView) findViewById(R.id.TextView);
-        
-        tv.setText("Hello");
-        
         Button button = (Button) findViewById(R.id.Button);
         
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         
         button.setOnClickListener(new View.OnClickListener()
         {

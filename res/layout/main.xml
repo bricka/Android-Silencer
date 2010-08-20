@@ -5,6 +5,6 @@
     android:layout_height="fill_parent"
     >
 
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Button" android:text="Toggle Silence"></Button>
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/TextView" android:text="@+id/TextView"></TextView>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/Button" android:text="@string/toggle_silence"></Button>
+
 </LinearLayout>
