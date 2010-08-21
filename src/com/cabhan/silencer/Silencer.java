@@ -1,3 +1,22 @@
+/*
+Android Silencer - Easily toggle vibrate and silence
+Copyright (C) 2010  Alex Brick
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
 package com.cabhan.silencer;
 
 import android.app.Activity;
@@ -24,27 +43,9 @@ public class Silencer extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        final audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        int ringerMode = audioManager.getRingerMode();
+        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         
         tv = (TextView) findViewById(R.id.TextView);
-
-        String text = null;
-
-        switch(ringerMode)
-        {
-            case AudioManager.RINGER_MODE_NORMAL:
-                text = getString(R.id.NORMAL_RINGER);
-                break;
-            case AudioManager.RINGER_MODE_SILENT:
-                text = getString(R.id.SILENT_RINGER);
-                break;
-            case AudioManager.RINGER_MODE_VIBRATE:
-                text = getString(R.id.VIBRATE_RINGER);
-                break;
-        }
-
-        tv.setText(text);
         
         Button button = (Button) findViewById(R.id.Button);
         
@@ -52,19 +53,64 @@ public class Silencer extends Activity
         {
         	public void onClick(View v)
         	{
-        		switch(ringerMode)
+        		int newRingerMode = -1;
+        		
+        		switch(audioManager.getRingerMode())
         		{
         			case AudioManager.RINGER_MODE_NORMAL:
         			case AudioManager.RINGER_MODE_SILENT:
         				audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                        tv.setText(getString(R.id.VIBRATE_RINGER));
+        				newRingerMode = AudioManager.RINGER_MODE_VIBRATE;
         				break;
         			case AudioManager.RINGER_MODE_VIBRATE:
         				audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                        tv.setText(getString(R.id.SILENT_RINGER));
+        				newRingerMode = AudioManager.RINGER_MODE_SILENT;
         				break;
         		}
+        		
+        		setRingerModeText(newRingerMode);
         	}
         });
+    }
+    
+    /**
+     * Called every time the activity is opened by the user.
+     */
+    @Override
+    public void onStart()
+    {
+    	super.onStart();
+    	
+        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        
+        setRingerModeText(audioManager.getRingerMode());
+    }
+    
+    /**
+     * Updates the displayed text view with the given status of the ringer.
+     * 
+     * @param ringerMode the new status of the ringer
+     */
+    private void setRingerModeText(final int ringerMode)
+    {
+    	String text = null;
+    	
+    	switch(ringerMode)
+        {
+            case AudioManager.RINGER_MODE_NORMAL:
+                text = getString(R.string.ringer_normal);
+                break;
+            case AudioManager.RINGER_MODE_SILENT:
+                text = getString(R.string.ringer_silent);
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                text = getString(R.string.ringer_vibrate);
+                break;
+            default:
+            	text = "Unknown";
+            	break;
+        }
+    	
+    	tv.setText("Current Ringer Status: " + text);
     }
 }
