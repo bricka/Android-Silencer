@@ -23,23 +23,45 @@ public class Silencer extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        final audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        int ringerMode = audioManager.getRingerMode();
+        
+        tv = (TextView) findViewById(R.id.TextView);
+
+        String text = null;
+
+        switch(ringerMode)
+        {
+            case AudioManager.RINGER_MODE_NORMAL:
+                text = getString(R.id.NORMAL_RINGER);
+                break;
+            case AudioManager.RINGER_MODE_SILENT:
+                text = getString(R.id.SILENT_RINGER);
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                text = getString(R.id.VIBRATE_RINGER);
+                break;
+        }
+
+        tv.setText(text);
         
         Button button = (Button) findViewById(R.id.Button);
-        
-        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         
         button.setOnClickListener(new View.OnClickListener()
         {
         	public void onClick(View v)
         	{
-        		switch(audioManager.getRingerMode())
+        		switch(ringerMode)
         		{
         			case AudioManager.RINGER_MODE_NORMAL:
         			case AudioManager.RINGER_MODE_SILENT:
         				audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                        tv.setText(getString(R.id.VIBRATE_RINGER));
         				break;
         			case AudioManager.RINGER_MODE_VIBRATE:
         				audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                        tv.setText(getString(R.id.SILENT_RINGER));
         				break;
         		}
         	}
